@@ -56,7 +56,7 @@ export const SignInUser = createAsyncThunk<string | null, SignInPayload, { rejec
   try {
     const { email, password } = payload;
     const { data } = await backendApi.post("api/v1/auth/sign-in", { email, password });
-    if (data.success) {
+    if (data.success && data.user?.token) {
       if (data.user) {
         toast.success(data.message);
         localStorage.setItem("token", data.user.token);
