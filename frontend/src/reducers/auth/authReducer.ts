@@ -30,7 +30,7 @@ interface SignInPayload {
   navigate: NavigateFunction;
 }
 
-interface AuthResponse {
+export interface AuthResponse {
   success: boolean;
   message: string;
   user?: User;
@@ -112,6 +112,13 @@ const authSlice = createSlice({
       toast.info("We will miss you");
       navigate("/sign-in");
     },
+    updateUser: (state, action) => {
+      const { name, email } = action.payload;
+      if (state.loggedInUser) {
+        state.loggedInUser.name = name;
+        state.loggedInUser.email = email;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -138,6 +145,6 @@ const authSlice = createSlice({
 });
 
 export const authReducer = authSlice.reducer;
-export const { logOutUser } = authSlice.actions;
+export const { logOutUser, updateUser } = authSlice.actions;
 export const selectLoggedInUser = (state: RootState) => state.auth.loggedInUser;
 export const selectLoading = (state: RootState) => state.auth.loading;

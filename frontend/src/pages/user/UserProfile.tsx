@@ -1,13 +1,45 @@
 import React, { useEffect, useState } from "react";
 import SideBar from "../../components/SideBar";
-import { useSelector } from "react-redux";
-import { selectLoggedInUser } from "../../reducers/auth/authReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { AuthResponse, selectLoggedInUser, updateUser } from "../../reducers/auth/authReducer";
+import { toast } from "sonner";
+import backendApi from "../../api/backendApi";
+import { useConfig } from "../../customHooks/useConfigHook";
 
 const UserProfile: React.FC = () => {
   const loggedInUser = useSelector(selectLoggedInUser);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [edit, setEdit] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const { configWithJWT } = useConfig();
+
+  const handleEditClick = () => {
+    setEdit((prev) => !prev);
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      const { data } = await backendApi.post<AuthResponse>(
+        "/api/v1/user/update",
+        {
+          name,
+          email,
+        },
+        configWithJWT
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        dispatch(updateUser({ name, email }));
+        setEdit(false);
+      } else {
+        toast.warning(data.message);
+      }
+    } catch (error) {
+      toast.error(`Internal server error ${error}`);
+    }
+  };
 
   useEffect(() => {
     if (loggedInUser?.name) {
@@ -61,7 +93,7 @@ const UserProfile: React.FC = () => {
               </div>
             </div>
             <div className="flex justify-end">
-              <button type="button" className="bg-blue-500 text-white py-2 px-4 rounded-md focus:outline-none hover:bg-blue-600 " onClick={() => setEdit(true)}>
+              <button type="button" className="bg-blue-500 text-white py-2 px-4 rounded-md focus:outline-none hover:bg-blue-600 " onClick={() => (edit ? handleSaveClick() : handleEditClick())}>
                 {edit ? "Save" : "Edit"}
               </button>
             </div>
