@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import Layout from "../../components/Layout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthFormData } from "../../types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../reducers/store";
-import { SignInUser } from "../../reducers/auth/authReducer";
+import { selectLoading, SignInUser } from "../../reducers/auth/authReducer";
 
 const SignUp: React.FC = () => {
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
     password: "",
   });
-
+  const loading = useSelector(selectLoading);
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +26,7 @@ const SignUp: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { email, password } = formData;
-    dispatch(SignInUser({ email, password }));
+    dispatch(SignInUser({ email, password, navigate }));
   };
 
   return (
@@ -63,8 +64,18 @@ const SignUp: React.FC = () => {
             <Link to={"/"} className="text-sm font-medium text-indigo-600 hover:text-indigo-500 ">
               Forgot your password?
             </Link>
-            <button type="submit" className="w-full py-3 bg-green-500 text-white font-bold rounded-md shadow-md transition duration-300 disabled:bg-green-300 disabled:cursor-not-allowed flex items-center justify-center">
-              Sign In
+            <button type="submit" className="w-full py-3 bg-green-500 text-white font-bold rounded-md shadow-md transition duration-300 disabled:bg-green-300 disabled:cursor-not-allowed flex items-center justify-center" disabled={loading}>
+              {loading ? (
+                <>
+                  <svg className="animate-spin mr-2 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                  </svg>
+                  Verifying...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </button>
           </form>
           <p className="text-sm text-center mt-5">
