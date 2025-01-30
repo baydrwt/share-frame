@@ -61,7 +61,7 @@ const SignUp: React.FC = () => {
                 className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
               />
             </div>
-            <Link to={"/"} className="text-sm font-medium text-indigo-600 hover:text-indigo-500 ">
+            <Link to={"/reset-password"} className="text-sm font-medium text-indigo-600 hover:text-indigo-500 ">
               Forgot your password?
             </Link>
             <button type="submit" className="w-full py-3 bg-green-500 text-white font-bold rounded-md shadow-md transition duration-300 disabled:bg-green-300 disabled:cursor-not-allowed flex items-center justify-center" disabled={loading}>
@@ -79,7 +79,7 @@ const SignUp: React.FC = () => {
             </button>
           </form>
           <p className="text-sm text-center mt-5">
-            Don't have an acoount?
+            Don't have an acount?
             <Link to={"/sign-up"} className="text-sm font-medium text-indigo-600 hover:text-indigo-500 pl-1">
               Sign Up for free
             </Link>
