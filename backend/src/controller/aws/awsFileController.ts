@@ -1,10 +1,11 @@
 import { RequestHandler } from "express";
 import dotenv from "dotenv";
-import { S3Client } from "@aws-sdk/client-s3";
+import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import path from "path";
 import Video from "../../model/videoSchema";
 import User from "../../model/userSchema";
 import { sendResponse } from "../../utils/sendResponse";
+import { Readable } from "stream";
 
 dotenv.config();
 
@@ -67,6 +68,77 @@ export const uploadFile: RequestHandler = async (req, res) => {
     }
   } catch (error) {
     console.error(`Error in uploading the video ${error}`);
+    return sendResponse(res, 500, false, "Internal server error");
+  }
+};
+
+export const fetchVideos: RequestHandler = async (req, res) => {
+  try {
+    const videos = await Video.find({ isPrivate: false }).sort({ createdAt: -1 }).populate("uploadedBy", "email");
+    sendResponse(res, 200, true, "Fetch videos successfuly", { videos });
+  } catch (error) {
+    console.error(`Something went wrong ${error}`);
+    return sendResponse(res, 500, false, "Internal server error");
+  }
+};
+
+export const fetchSingleVideo: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return sendResponse(res, 404, false, "Id not found");
+    }
+    const video = await Video.findById(id).populate("uploadedBy", "email");
+    if (!video) {
+      return sendResponse(res, 404, false, "Video not found");
+    }
+    sendResponse(res, 200, false, "Your video fetched successfully", { video });
+  } catch (error) {
+    console.error(`Something went wrong ${error}`);
+    return sendResponse(res, 500, false, "Internal server error");
+  }
+};
+
+export const deleteVideo: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return sendResponse(res, 404, false, "Id not found");
+    }
+    const video = await Video.findByIdAndDelete(id);
+    if (!video) {
+      return sendResponse(res, 404, false, "The video doesn't exist");
+    }
+    sendResponse(res, 200, true, "The video was deleted successfully");
+  } catch (error) {
+    console.error(`Something went wrong ${error}`);
+    return sendResponse(res, 500, false, "Internal server error");
+  }
+};
+
+export const downloadVideo: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return sendResponse(res, 404, false, "Id not found");
+    }
+    const video = await Video.findById(id);
+    if (!video) {
+      return sendResponse(res, 404, false, "The video doesn't exist");
+    }
+    const params = {
+      Bucket: process.env.AWS_BUCKET_NAME as string,
+      Key: video.key,
+    };
+
+    const command = new GetObjectCommand(params);
+    const s3Response = await s3.send(command);
+    const stream = s3Response.Body as Readable;
+    res.setHeader("Content-Disposition", `attachment;filename${video.title}`);
+    res.setHeader("Content-Type", s3Response.ContentType || "video/mp4");
+    stream.pipe(res);
+  } catch (error) {
+    console.error(`Something went wrong ${error}`);
     return sendResponse(res, 500, false, "Internal server error");
   }
 };
