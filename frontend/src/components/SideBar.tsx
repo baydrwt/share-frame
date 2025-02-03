@@ -41,7 +41,7 @@ const SideBar: React.FC = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to={"/user/upload/video"} onClick={toggleSidebar} className="flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md">
+              <NavLink to={"/user/upload-video"} onClick={toggleSidebar} className="flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md">
                 <FaUpload size={20} className="mr-3" />
                 <span>Upload Video</span>
               </NavLink>
