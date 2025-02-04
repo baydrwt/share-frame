@@ -92,7 +92,7 @@ export const fetchSingleVideo: RequestHandler = async (req, res) => {
     if (!video) {
       return sendResponse(res, 404, false, "Video not found");
     }
-    sendResponse(res, 200, false, "Your video fetched successfully", { video });
+    sendResponse(res, 200, true, "Your video fetched successfully", { video });
   } catch (error) {
     console.error(`Something went wrong ${error}`);
     return sendResponse(res, 500, false, "Internal server error");
@@ -119,6 +119,7 @@ export const deleteVideo: RequestHandler = async (req, res) => {
 export const downloadVideo: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
+    const { userId } = req.query;
     if (!id) {
       return sendResponse(res, 404, false, "Id not found");
     }
@@ -130,7 +131,13 @@ export const downloadVideo: RequestHandler = async (req, res) => {
       Bucket: process.env.AWS_BUCKET_NAME as string,
       Key: video.key,
     };
-
+    if (userId) {
+      const user = await User.findById(userId);
+      if (user) {
+        user.downloadCount += 1;
+        await user.save();
+      }
+    }
     const command = new GetObjectCommand(params);
     const s3Response = await s3.send(command);
     const stream = s3Response.Body as Readable;
@@ -139,6 +146,41 @@ export const downloadVideo: RequestHandler = async (req, res) => {
     stream.pipe(res);
   } catch (error) {
     console.error(`Something went wrong ${error}`);
+    return sendResponse(res, 500, false, "Internal server error");
+  }
+};
+
+export const updateVideo: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return sendResponse(res, 404, false, "Id not found");
+    }
+    const video = await Video.findById(id);
+    if (!video) {
+      return sendResponse(res, 404, false, "The video doesn't exist");
+    }
+    Object.assign(video, req.body);
+    await video.save();
+
+    if (req.files && (req.files as any).video) {
+      const videoFile = (req.files as any).video[0];
+      if ("location" in videoFile && "key" in videoFile) {
+        video.path = videoFile.location;
+        video.key = videoFile.key;
+      }
+    }
+
+    if (req.files && (req.files as any).thumbnail) {
+      const thumbnailFile = (req.files as any).thumbnail[0];
+      if ("location" in thumbnailFile && "key" in thumbnailFile) {
+        video.thumbnail = thumbnailFile.location;
+      }
+    }
+    await video.save();
+    return sendResponse(res, 200, true, "Video updated successfully", { video });
+  } catch (error) {
+    console.error(`Error in updating the video ${error}`);
     return sendResponse(res, 500, false, "Internal server error");
   }
 };
