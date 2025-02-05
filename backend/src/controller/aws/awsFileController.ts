@@ -184,3 +184,19 @@ export const updateVideo: RequestHandler = async (req, res) => {
     return sendResponse(res, 500, false, "Internal server error");
   }
 };
+
+export const fetchUserVideo: RequestHandler = async (req, res) => {
+  try {
+    if (req.user instanceof User) {
+      const userId = req.user._id;
+      if (!userId) {
+        return sendResponse(res, 404, false, "User id not found");
+      }
+      const videos = await Video.find({ uploadedBy: userId });
+      return sendResponse(res, 200, true, "Success fetch your video", { videos });
+    }
+  } catch (error) {
+    console.error("Something went wrong");
+    return sendResponse(res, 500, false, "Internal server error");
+  }
+};
