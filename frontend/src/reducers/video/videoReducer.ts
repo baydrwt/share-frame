@@ -61,9 +61,10 @@ const initialState: VideoState = {
   editVideo: null,
 };
 
+// Get Public Videos
 export const fetchPublicVideos = createAsyncThunk<IVideo[], void, { rejectValue: string }>("/videos/fetch-public-videos", async (_, thunkApi) => {
   try {
-    const { data } = await backendApi.get<FilesResponse>("/api/v1/aws/fetch-videos");
+    const { data } = await backendApi.get<FilesResponse>("/api/v1/fetch-videos");
 
     if (data.success) {
       return data.videos || [];
@@ -74,6 +75,29 @@ export const fetchPublicVideos = createAsyncThunk<IVideo[], void, { rejectValue:
     const errMessage = error.response?.data?.message || "Something went wrong";
     toast.error(errMessage);
     return thunkApi.rejectWithValue(errMessage);
+  }
+});
+
+// Get Download Link
+export const downloadVideo = createAsyncThunk<void, { id: string }, { rejectValue: string }>("/video/download", async (payload, thunkApi) => {
+  try {
+    const { id } = payload;
+    const state = thunkApi.getState() as RootState;
+    const queryParams = state.auth.loggedInUser ? `userId=${encodeURIComponent(state.auth.loggedInUser._id)}` : "";
+    const response = await backendApi.get(`/api/v1/download/file/${id}${queryParams}`, { responseType: "blob" });
+    const contentDisposition = response.headers["content-disposition"];
+    const filename = contentDisposition ? contentDisposition.split("filename=")[1].replace(/['"]/g, "") : "video.mp4";
+    const blob = new Blob([response.data], {
+      type: response.headers["content-type"],
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error: any) {
+    return thunkApi.rejectWithValue(error);
   }
 });
 
@@ -98,3 +122,4 @@ export const videoSlice = createSlice({
 
 export const videoReducer = videoSlice.reducer;
 export const selectPublicVideos = (state: RootState) => state.video.publicVideos;
+export const selectLoadingVideos = (state: RootState) => state.video.isLoading;

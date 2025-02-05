@@ -3,10 +3,12 @@ import authRoute from "./authRoute";
 import userRoute from "./userRoute";
 import awsRoute from "./awsRoute";
 import passport from "passport";
-import { downloadVideo } from "../controller/aws/awsFileController";
+import { downloadVideo, fetchSingleVideo, fetchVideos } from "../controller/aws/awsFileController";
 
 const router = express.Router();
 
+router.get("/fetch-videos", fetchVideos);
+router.get("/fetch-single/:id", fetchSingleVideo);
 router.use("/auth", authRoute);
 router.get("/download/file/:id", downloadVideo);
 router.use("/user", passport.authenticate("jwt", { session: false }), userRoute);
