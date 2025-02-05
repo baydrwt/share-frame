@@ -192,7 +192,7 @@ export const fetchUserVideo: RequestHandler = async (req, res) => {
       if (!userId) {
         return sendResponse(res, 404, false, "User id not found");
       }
-      const videos = await Video.find({ uploadedBy: userId });
+      const videos = await Video.find({ uploadedBy: userId }).populate("uploadedBy", "email");
       return sendResponse(res, 200, true, "Success fetch your video", { videos });
     }
   } catch (error) {
