@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../reducers/store";
 import { fetchPublicVideos, searchVideos, selectLoadingVideos, selectPublicVideos, selectSearchVideos } from "../reducers/video/videoReducer";
 import HeroVideoCard from "../components/HeroVideoCard";
+import Skeleton from "react-loading-skeleton";
 
 const AllVideos: React.FC = () => {
   const [query, setQuery] = useState<string>("");
@@ -34,9 +35,25 @@ const AllVideos: React.FC = () => {
             </button>
           </div>
           <div className="mt-7">
-            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
-              {searchTerm ? searchResults?.map((video) => <HeroVideoCard key={video._id} video={video} />) : publicVideos?.map((video) => <HeroVideoCard key={video._id} video={video} />)}
-            </div>
+            {searchTerm ? (
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
+                {searchResults?.map((video) => (
+                  <HeroVideoCard key={video._id} video={video} />
+                ))}
+              </div>
+            ) : isLoading ? (
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {[...Array(8)].map((_, index) => (
+                  <Skeleton key={index} height={300} width={200} className="rounded-lg" />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
+                {publicVideos?.map((video, index) => (
+                  <HeroVideoCard key={index} video={video} />
+                ))}
+              </div>
+            )}
           </div>
         </main>
       </div>

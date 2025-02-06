@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectLoggedInUser } from "../reducers/auth/authReducer";
+import { useDispatch } from "react-redux";
 import { downloadVideo, IVideo } from "../reducers/video/videoReducer";
 import ReactPlayer from "react-player";
 import { FaDownload, FaExternalLinkAlt, FaPlay, FaShareAlt } from "react-icons/fa";
@@ -20,7 +19,6 @@ const HeroVideoCard: React.FC<IVideoCard> = ({ video }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [duration, setDuration] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const loggedInUser = useSelector(selectLoggedInUser);
   const dispatch = useDispatch<AppDispatch>();
 
   const handlePlayPause = () => {

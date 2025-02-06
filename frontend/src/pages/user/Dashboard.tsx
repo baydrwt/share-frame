@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserDetails, selectLoggedInUser } from "../../reducers/auth/authReducer";
 import SideBar from "../../components/SideBar";
 import { FaEnvelope, FaUser, FaUserTag } from "react-icons/fa";
+import { AppDispatch } from "../../reducers/store";
 
 const Dashboard: React.FC = () => {
   const loggedInUser = useSelector(selectLoggedInUser);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
