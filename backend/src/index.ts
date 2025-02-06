@@ -11,10 +11,13 @@ connectDb();
 
 const corsOptions = {
   origin: ["https://localhost:5173", "https://share-frame.vercel.app"],
-  optionSuccessStatus: 200,
+  optionsSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(passportJwtStrategy.initialize());
 
