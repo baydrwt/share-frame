@@ -1,0 +1,12 @@
+{
+  "rewirtes": [
+    {
+      "source": "/static/(.*)",
+      "destionation": "/static/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const backendApi = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://share-frame.vercel.app",
 });
 
 export default backendApi;

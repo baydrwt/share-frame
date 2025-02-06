@@ -27,7 +27,7 @@ const HeroVideoCard: React.FC<IVideoCard> = ({ video }) => {
   };
 
   const handleShare = () => {
-    const videoLink = `http://localhost:5173/video/${video._id}`;
+    const videoLink = `https://share-frame.vercel.app/video/${video._id}`;
     navigator.clipboard.writeText(videoLink).then(() => {
       toast.success("Link copied to clipboard");
     });
