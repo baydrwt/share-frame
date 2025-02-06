@@ -20,9 +20,9 @@ app.use(passportJwtStrategy.initialize());
 
 const port = process.env.PORT || 8080;
 
-app.use("/", (req, res) => {
-  res.send("Hello world");
-});
+// app.use("/", (req, res) => {
+//   res.send("Hello world");
+// });
 
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
