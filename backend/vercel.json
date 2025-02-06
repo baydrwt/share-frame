@@ -12,7 +12,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "destination": "/src/index.ts"
+      "dest": "/src/index.ts"
     }
   ]
 }
