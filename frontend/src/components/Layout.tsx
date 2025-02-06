@@ -15,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="flex items-center gap-3 md:gap-5 lg:gap-7 capitalize">
           <NavLink to={"/"}>Home</NavLink>
           <NavLink to={"/all-videos"}>All Videos</NavLink>
-          {token ? <NavLink to={"/user/profile"}>Dashboard</NavLink> : <NavLink to={"/sign-in"}>Sign In</NavLink>}
+          {token ? <NavLink to={"/user/dashboard"}>Dashboard</NavLink> : <NavLink to={"/sign-in"}>Sign In</NavLink>}
         </div>
       </nav>
       <main className="flex-1 flex flex-col items-center w-full mt-14">{children}</main>

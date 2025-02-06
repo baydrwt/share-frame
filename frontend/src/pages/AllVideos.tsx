@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../reducers/store";
-import { fetchPublicVideos, searchVideos, selectPublicVideos, selectSearchVideos } from "../reducers/video/videoReducer";
+import { fetchPublicVideos, searchVideos, selectLoadingVideos, selectPublicVideos, selectSearchVideos } from "../reducers/video/videoReducer";
 import HeroVideoCard from "../components/HeroVideoCard";
 
 const AllVideos: React.FC = () => {
   const [query, setQuery] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const isLoading = useSelector(selectLoadingVideos);
   const searchResults = useSelector(selectSearchVideos);
   const dispatch = useDispatch<AppDispatch>();
   const publicVideos = useSelector(selectPublicVideos);

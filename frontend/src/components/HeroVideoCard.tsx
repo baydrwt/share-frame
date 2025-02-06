@@ -70,7 +70,7 @@ const HeroVideoCard: React.FC<IVideoCard> = ({ video }) => {
         <ReactPlayer url={video.path} light={video.thumbnail} width={"100%"} height={"100%"} controls={isPlaying} playing={isPlaying} onPause={() => setIsPlaying(false)} onPlay={() => setIsPlaying(true)} />
         {!isPlaying && isHovered && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center transition-opacity duration-300">
-            <FaPlay size={30} className="text-white cursor-pointer hover:text-gray-300 transition duration-300" />
+            <FaPlay size={30} className="text-white cursor-pointer hover:text-gray-300 transition duration-300" onClick={handlePlayPause} />
             {isLoading ? (
               <p className="text-white cursor-pointer absolute bottom-2 left-2 hover:text-gray-300 transition duration-200">Downloading ....</p>
             ) : (

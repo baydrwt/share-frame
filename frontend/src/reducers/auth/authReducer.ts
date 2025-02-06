@@ -10,8 +10,8 @@ interface User {
   email: string;
   name?: string;
   token: string;
-  uploadContent: string;
-  downloadContent: string;
+  uploadCount: string;
+  downloadCount: string;
 }
 
 export interface AuthState {
@@ -62,7 +62,7 @@ export const SignInUser = createAsyncThunk<string | null, SignInPayload, { rejec
       if (data.user) {
         toast.success(data.message);
         localStorage.setItem("token", data.user.token);
-        navigate("/user/profile");
+        navigate("/user/dashboard");
       }
       return data.user.token || null;
     } else {

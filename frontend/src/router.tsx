@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import SingleVideo from "./pages/SingleVideo";
 import UserVideos from "./pages/user/UserVideos";
 import UpdateVideo from "./pages/user/UpdateVideo";
+import Dashboard from "./pages/user/Dashboard";
 
 export const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
   { path: "/sign-in", element: <ProtectedRoute element={<SignIn />} /> },
   { path: "/all-videos", element: <AllVideos /> },
   { path: "/user/profile", element: <ProtectedRouteHome element={<UserProfile />} /> },
+  { path: "/user/dashboard", element: <ProtectedRouteHome element={<Dashboard />} /> },
   { path: "/user/videos", element: <ProtectedRouteHome element={<UserVideos />} /> },
   { path: "/user/upload-video", element: <ProtectedRouteHome element={<Upload />} /> },
   { path: "/user/edit-video", element: <ProtectedRouteHome element={<UpdateVideo />} /> },
