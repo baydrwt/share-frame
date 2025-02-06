@@ -10,7 +10,7 @@ dotenv.config();
 connectDb();
 
 const corsOptions = {
-  origin: ["https://share-frame.vercel.app"],
+  origin: ["http://share-frame.vercel.app", "http://localhost:5173"],
   optionsSuccessStatus: 200,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -20,13 +20,6 @@ app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
 app.use(passportJwtStrategy.initialize());
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://share-frame.vercel.app");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
 
 const port = process.env.PORT || 8080;
 
