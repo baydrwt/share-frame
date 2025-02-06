@@ -10,7 +10,7 @@ dotenv.config();
 connectDb();
 
 const corsOptions = {
-  origin: ["https://share-frame.vercel.app", "https://localhost:8000"],
+  origin: ["https://localhost:5173", "https://share-frame.vercel.app"],
   optionSuccessStatus: 200,
 };
 
@@ -19,10 +19,6 @@ app.use(cors(corsOptions));
 app.use(passportJwtStrategy.initialize());
 
 const port = process.env.PORT || 8080;
-
-app.use("/", (req, res) => {
-  res.send("Hello world");
-});
 
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
