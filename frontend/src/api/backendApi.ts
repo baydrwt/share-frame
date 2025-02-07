@@ -1,4 +1,5 @@
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 const backendApi = axios.create({
   // baseURL: "http://localhost:8000",
