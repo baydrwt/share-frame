@@ -10,8 +10,8 @@ dotenv.config();
 connectDb();
 
 const corsOptions = {
-  origin: ["https://share-frame.vercel.app", "http://localhost:5173"],
-  optionsSuccessStatus: 200,
+  origin: ["http://localhost:5173", "https://share-frame.vercel.app/"],
+  optionSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));

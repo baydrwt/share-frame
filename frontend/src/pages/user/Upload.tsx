@@ -20,7 +20,13 @@ const Upload: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    const maxSize = 4.5 * 1024 * 1024;
+
     if (file) {
+      if (file.size > maxSize) {
+        toast.error("File terlalu besar! Maksimum 4.5MB.");
+        return;
+      }
       if (file.type.startsWith("video/")) {
         const videoUrl = URL.createObjectURL(file);
         setVideoSrc(videoUrl);
