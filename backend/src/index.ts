@@ -9,32 +9,37 @@ import passportJwtStrategy from "./config/passportJwtStrategy";
 dotenv.config();
 connectDb();
 
+// Updated CORS configuration with explicit credentials handling
 const corsOptions = {
-  origin: ["https://share-frame.vercel.app", "http://localhost:5173", "https://share-frame-backend-api.vercel.app"],
+  origin: function (origin: any, callback: any) {
+    const allowedOrigins = ["https://share-frame.vercel.app", "http://localhost:5173"];
+
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
-  optionsSuccessStatus: 200,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "Origin", "X-Requested-With", "Accept"],
-  exposedHeaders: ["Content-Range", "X-Content-Range"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
 
+// Apply CORS middleware first
 app.use(cors(corsOptions));
 
-app.options("*", cors(corsOptions));
-
-app.use(passportJwtStrategy.initialize());
-
+// Body parser middleware
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://share-frame.vercel.app");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
-  next();
-});
+app.use(passportJwtStrategy.initialize());
 
+// Routes
 app.use("/api/v1", routes);
 
 const port = process.env.PORT || 8080;
