@@ -20,8 +20,8 @@ export interface AuthState {
 }
 
 interface SignUpPayload {
-  email: string;
-  password: string;
+  formData: object;
+  navigate: NavigateFunction;
 }
 
 interface SignInPayload {
@@ -43,9 +43,11 @@ const initialState: AuthState = {
 
 export const SignUpUser = createAsyncThunk<void, SignUpPayload, { rejectValue: string }>("auth/sign-up-user", async (payload) => {
   try {
-    const { data } = await backendApi.post<AuthResponse>("api/v1/auth/sign-up", payload);
+    const { formData, navigate } = payload;
+    const { data } = await backendApi.post<AuthResponse>("api/v1/auth/sign-up", formData);
     if (data.success) {
       toast.success(data.message);
+      navigate("/sign-in");
     } else {
       toast.warning(data.message);
     }
@@ -122,6 +124,15 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(SignUpUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(SignUpUser.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(SignUpUser.rejected, (state) => {
+        state.loading = false;
+      })
       .addCase(SignInUser.pending, (state) => {
         state.loading = true;
       })
