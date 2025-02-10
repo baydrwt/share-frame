@@ -18,6 +18,13 @@ const AllVideos: React.FC = () => {
     setSearchTerm(query);
   };
 
+  const handleEnterPress = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleSearch();
+    }
+  };
+
   useEffect(() => {
     if (searchTerm) {
       dispatch(searchVideos(searchTerm));
@@ -29,18 +36,28 @@ const AllVideos: React.FC = () => {
       <div className="w-full p-4">
         <main className="w-[95vw]">
           <div className="mt-3 px-3 w-full flex justify-center">
-            <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} className="w-8/12 block rounded-full p-2 focus:outline-none border border-black focus:border-none focus:outline-blue-600 bg-bgOne" />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-8/12 block rounded-full p-2 focus:outline-none border border-black focus:border-none focus:outline-blue-600 bg-bgOne"
+              onKeyDown={handleEnterPress}
+            />
             <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-full" onClick={handleSearch}>
               Search
             </button>
           </div>
           <div className="mt-7">
-            {searchTerm ? (
-              <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
-                {searchResults?.map((video) => (
-                  <HeroVideoCard key={video._id} video={video} />
-                ))}
-              </div>
+            {searchTerm && searchResults ? (
+              searchResults?.length > 0 ? (
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
+                  {searchResults?.map((video) => (
+                    <HeroVideoCard key={video._id} video={video} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center text-2xl font-bold w-full">Video not found.</p>
+              )
             ) : isLoading ? (
               <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {[...Array(8)].map((_, index) => (
