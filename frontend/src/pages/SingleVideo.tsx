@@ -58,7 +58,7 @@ const SingleVideo: React.FC = () => {
         {video && !isPlaying && (
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black flex flex-col justify-center items-start p-8" style={{ zIndex: 5 }}>
             <h1 className="text-3xl font-bold text-white mb-4">{video.title}</h1>
-            {video.description && <p>{parse(video.description)}</p>}
+            {video.description && <p className="text-gray-200">{parse(video.description)}</p>}
             <div className="flex space-x-4 mt-4">
               <button
                 className="bg-blue-500 text-white w-16 h-16 rounded-full flex justify-center items-center transition duration-300 animate-scale-pulse ease-in-out hover:bg-blue-700 hover:shadow-lg hover:scale-105 transform"

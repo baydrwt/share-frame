@@ -74,7 +74,7 @@ const HeroVideoCard: React.FC<IVideoCard> = ({ video }) => {
             ) : (
               <FaDownload size={20} className="text-white cursor-pointer absolute bottom-2 left-2 hover:text-gray-300 transition duration-200" onClick={handleDownload} />
             )}
-            <Link to={`video/${video._id}`}>
+            <Link to={`/video/${video._id}`}>
               <FaExternalLinkAlt size={20} className="text-white cursor-pointer absolute top-2 right-2 hover:text-gray-300 transition duration-200" />
             </Link>
             <div className="absolute z-10 top-2 left-2 cursor-pointer" onClick={handleShare}>
