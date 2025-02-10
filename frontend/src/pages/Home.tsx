@@ -23,8 +23,10 @@ const Home: React.FC = () => {
       <div className="heroSection relative w-full h-[80vh] m-0 p-0">
         {!isPlaying && (
           <div className="absolute flex flex-col justify-center items-center top-0 left-0 w-full h-full bg-gradient-to-tr from-black to-gray-700" style={{ zIndex: 5 }}>
-            <h1 className="text-4xl font-bold capitalizae mb-4 md:text-5xl text-transparant bg-clip-text bg-gradient-to-r from-yellow-400 via-red-300 to-yellow-800">ShareFrame with AWS 3S Bucket</h1>
-            <p className="text-lg mb-6 md:text-xl text-center font-extralight text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+            <h1 className="text-4xl font-bold capitalize mb-4 md:text-5xl  bg-gradient-to-r from-cyan-300 via-yellow-400 to-green-800 text-transparent bg-clip-text">ShareFrame with AWS 3S Bucket</h1>
+            <p className="text-lg mb-6 md:text-xl text-center font-extralight text-white w-3/4">
+              Platform berbasis cloud untuk menyimpan, mengelola, dan membagikan file video secara aman dan efisien.
+            </p>
             <button
               className="bg-blue-500 text-white flex items-center justify-center w-16 h-16 rounded-full transition duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:scale-105 transform animate-scale-pulse"
               onClick={() => setIsPlaying(true)}

@@ -26,8 +26,7 @@ const Upload: React.FC = () => {
       if (file.size > maxSize) {
         toast.error("File terlalu besar! Maksimum 4.5MB.");
         return;
-      }
-      if (file.type.startsWith("video/")) {
+      } else if (file.type.startsWith("video/")) {
         const videoUrl = URL.createObjectURL(file);
         setVideoSrc(videoUrl);
       }
