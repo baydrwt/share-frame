@@ -18,7 +18,7 @@ const AllVideos: React.FC = () => {
     setSearchTerm(query);
   };
 
-  const handleEnterPress = (event) => {
+  const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       handleSearch();
@@ -41,7 +41,7 @@ const AllVideos: React.FC = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-8/12 block rounded-full p-2 focus:outline-none border border-black focus:border-none focus:outline-blue-600 bg-bgOne"
-              onKeyDown={handleEnterPress}
+              onKeyDown={(e) => handleEnterPress(e)}
             />
             <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-full" onClick={handleSearch}>
               Search
